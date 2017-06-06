@@ -2,6 +2,13 @@
 
 #include "RollingMovementComponent.h"
 
+
+URollingMovementComponent::URollingMovementComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+	AnimationTime = -1;
+	
+}
+
 bool URollingMovementComponent::IsMoving() const
 {
 	return AnimationTime >= 0;
@@ -20,7 +27,7 @@ void URollingMovementComponent::StartStep(FVector Direction, float Angle, FVecto
 	RotationRate = FRotator(FQuat(RotationAxis, RotationSpeed));
 	AnimationTime = 0;
 	TargetRotation = FQuat(RotationAxis, Angle) * UpdatedComponent->GetComponentQuat();
-	TargetPosition = UpdatedComponent->GetComponentLocation() + InPivot - FQuat(RotationAxis, Angle).RotateVector(InPivot);
+	TargetPosition = UpdatedComponent->GetComponentLocation();// +InPivot - FQuat(RotationAxis, Angle).RotateVector(InPivot);
 }
 
 void URollingMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
@@ -39,9 +46,18 @@ void URollingMovementComponent::TickComponent(float DeltaTime, enum ELevelTick T
 
 	if (IsMoving())
 	{
+		AnimationTime += DeltaTime;
+		if (AnimationTime >= AnimationDuration)
+		{
+			DeltaTime -= AnimationTime - AnimationDuration;
+			AnimationTime = -1;
+		}
 		// Compute new rotation
 		const FQuat OldRotation = UpdatedComponent->GetComponentQuat();
-		const FQuat DeltaRotation = (RotationRate * DeltaTime).Quaternion();
+		FVector Axis;
+		float Angle;
+		RotationRate.Quaternion().ToAxisAndAngle(Axis, Angle);
+		const FQuat DeltaRotation = FQuat(Axis, RotationSpeed * DeltaTime);
 		const FQuat NewRotation = DeltaRotation * OldRotation;
 
 		// Compute new location
