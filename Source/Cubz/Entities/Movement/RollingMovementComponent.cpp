@@ -21,8 +21,9 @@ void URollingMovementComponent::SetRotationSpeed(float InRotationSpeed)
 
 void URollingMovementComponent::StartStep(FVector Direction, float Angle, FVector InPivot)
 {
-	FVector RotationAxis = FVector::CrossProduct(Direction, InPivot);
-	Pivot = InPivot;
+	RotationAxis = FVector::CrossProduct(Direction, InPivot);
+	RotationAxis.Normalize();
+	Pivot = UpdatedComponent->GetComponentRotation().GetInverse().RotateVector(InPivot);
 	AnimationDuration = Angle / RotationSpeed;
 	RotationRate = FRotator(FQuat(RotationAxis, RotationSpeed));
 	AnimationTime = 0;
@@ -54,10 +55,7 @@ void URollingMovementComponent::TickComponent(float DeltaTime, enum ELevelTick T
 		}
 		// Compute new rotation
 		const FQuat OldRotation = UpdatedComponent->GetComponentQuat();
-		FVector Axis;
-		float Angle;
-		RotationRate.Quaternion().ToAxisAndAngle(Axis, Angle);
-		const FQuat DeltaRotation = FQuat(Axis, RotationSpeed * DeltaTime);
+		const FQuat DeltaRotation = FQuat(RotationAxis, RotationSpeed * DeltaTime);
 		const FQuat NewRotation = DeltaRotation * OldRotation;
 
 		// Compute new location

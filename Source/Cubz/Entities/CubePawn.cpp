@@ -36,9 +36,9 @@ void ACubePawn::SetInputX(float Intensity)
 	if (!MovementComponent->IsMoving())
 	{
 		if (Intensity > 0)
-			MovementComponent->StartStep(FVector(1, 0, 0), PI / 2, FVector(1, 0, -1));
+			MovementComponent->StartStep(FVector(1, 0, 0), PI / 2, FVector(50, 0, -50));
 		if (Intensity < 0)
-			MovementComponent->StartStep(FVector(-1, 0, 0), PI / 2, FVector(-1, 0, -1));
+			MovementComponent->StartStep(FVector(-1, 0, 0), PI / 2, FVector(-50, 0, -50));
 	}
 }
 
@@ -48,9 +48,9 @@ void ACubePawn::SetInputY(float Intensity)
 	if (!MovementComponent->IsMoving())
 	{
 		if (Intensity > 0)
-			MovementComponent->StartStep(FVector(0, 1, 0), PI / 2, FVector(0, 1, -1));
+			MovementComponent->StartStep(FVector(0, 1, 0), PI / 2, FVector(0, 50, -50));
 		else if(Intensity < 0)
-			MovementComponent->StartStep(FVector(0, -1, 0), PI / 2, FVector(0, -1, -1));
+			MovementComponent->StartStep(FVector(0, -1, 0), PI / 2, FVector(0, -50, -50));
 	}
 }
 

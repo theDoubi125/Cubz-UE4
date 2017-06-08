@@ -32,4 +32,6 @@ private:
 	FRotator RotationRate;
 	float AnimationTime;
 	float AnimationDuration;
+
+	FVector RotationAxis;
 };
