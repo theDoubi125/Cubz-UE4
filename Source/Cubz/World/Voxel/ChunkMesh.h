@@ -6,6 +6,17 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(ChunkLog, Log, All);
 
+struct FMeshData
+{
+	TArray<FVector> Vertices;
+	TMap<FVector, uint32> VerticesIndex;
+	TArray<int32> Triangles;
+	TArray<FVector> Normals;
+	TArray<FVector2D> UV0;
+	TArray<FLinearColor> VertexColors;
+	TArray<FProcMeshTangent> Tangents;
+};
+
 UCLASS()
 class AChunkMesh : public AActor
 {
@@ -29,7 +40,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	UProceduralMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
+		uint8 Width;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
+		uint8 Height;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
+		uint8 Depth;
+
 private:
+	UPROPERTY()
 	TArray<uint8> Data;
-	uint8 Dimensions[3];
 };
