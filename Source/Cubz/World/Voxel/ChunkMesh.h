@@ -30,7 +30,10 @@ public:
 	void SaveToFile(const FString& File) const;
 
 	UFUNCTION(BlueprintCallable, Category = "Chunk")
-		uint8 GetCellContent(uint8 x, uint8 y, uint8 z) const;
+		uint8 GetCellContent(int32 x, int32 y, int32 z) const;
+	
+	UFUNCTION(BlueprintCallable, Category = "Chunk")
+		void SetCellContent(int32 x, int32 y, int32 z, uint8 value);
 
 	void UpdateMesh();
 
@@ -41,11 +44,13 @@ public:
 	UProceduralMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
-		uint8 Width;
+		int32 Width;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
-		uint8 Height;
+		int32 Height;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
-		uint8 Depth;
+		int32 Depth;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dimension")
+		int32 MaxFaces;
 
 private:
 	UPROPERTY()
